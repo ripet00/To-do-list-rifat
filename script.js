@@ -55,7 +55,7 @@ function showTodo(filter) {
   let checkTask = taskBox.querySelectorAll(".task");
   if (!checkTask.length) {
     // if no tasks present, add active class to clear All button
-    clearAll.classList("active");
+    clearAll.classList.remove("active");
   } else {
     // If tasks present, add active class to clearAll button
     clearAll.classList.add("active");
@@ -89,3 +89,52 @@ taskInput.addEventListener("keyup", (e) => {
     showTodo(document.querySelector("span.active").id);
   }
 });
+
+/* This event listener is triggered when the clearAll element is clicked it clears all the task */
+clearAll.addEventListener("click", () => {
+  isEditTask = false;
+  todos.splice(0,todos.length);
+  localStorage.setItem("todo-list",JSON.stringify(todos));
+  showTodo();
+});
+
+/* displaying a menu associated with a selectedTask */
+function showMenu(selectedTask) {
+  let menuDiv = selectedTask.parentElement.lastElementChild;
+  menuDiv.classList.add("show");
+  document.addEventListener("click",(e) => {
+    if(e.target.tagName != "I" || e.target != selectedTask) {
+      menuDiv.classList.remove("show");
+    }
+  });
+}
+
+/* update the status of a selected task */
+function updateStatus(selectedTask){
+  let taskName = selectedTask.parentElement.lastElementChild;
+  // check if there any tasks present
+  if(selectedTask.checked) {
+    taskName.classList.add("checked");
+    todos[selectedTask.id].status = "completed";
+  } else {
+    taskName.classList.remove("checked");
+    todos[selectedTask.id].status = "pending";
+  }
+  // update the local storage with the updated todos array
+  localStorage.setItem("todo-list",JSON.stringify(todos));
+}
+
+function editTask(taskID,textName) {
+  editId = taskID;
+  isEditTask = true;
+  taskInput.value = textName;
+  taskInput.focus();
+  taskInput.classList.add("active");
+}
+
+function deleteTask(deleteID,filter) {
+  isEditTask = false;
+  todos.splice(deleteID,1);
+  localStorage.setItem("todo-list",JSON.stringify(todos));
+  showTodo(filter);
+}
