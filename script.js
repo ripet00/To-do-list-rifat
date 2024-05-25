@@ -37,7 +37,7 @@ function showTodo(filter) {
                         <li  onclick='editTask(${id}, "${todo.name}")'>
                             <i class="uil uil-pen"></i>Edit
                         </li>
-                        <li onclick='editTask(${id}, "${filter}")'>
+                        <li onclick='deleteTask(${id}, "${filter}")'>
                             <i class="uil uil-trash"></i>Delete
                         </li>
                     </ul>
